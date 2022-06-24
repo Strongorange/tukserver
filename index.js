@@ -1,5 +1,8 @@
 import express from "express";
 import "./db";
+import morgan from "morgan";
+import arduinoRouter from "./routers/arduinoRouter";
+import userRouter from "./routers/userRouter";
 
 const PORT = 3000;
 
@@ -10,18 +13,9 @@ let bottomAngleServer;
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
+app.use(morgan("dev"));
 
-app.get("/", (req, res) => {
-  console.log("data sent to Arduino");
-  res.send(
-    JSON.stringify({ topAngle: topAngleServer, bottomAngle: bottomAngleServer })
-  );
-});
-
-app.post("/", (req, res) => {
-  console.log(req.body);
-  topAngleServer = req.body.topAngle;
-  bottomAngleServer = req.body.bottomAngle;
-});
+app.use("/user", userRouter);
+app.use("/arduino", arduinoRouter);
 
 app.listen(PORT, () => console.log("Listening port 3000"));
