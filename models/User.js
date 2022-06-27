@@ -1,10 +1,27 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 import bcrypt from "bcrypt";
 
 const userSchema = new mongoose.Schema({
+  createdAt: { type: Number, default: Date.now() },
   email: { type: String, required: true, unique: true },
   username: { type: String, required: true, unique: true },
   password: { type: String },
+  top: [
+    new Schema({
+      uri: { type: String, default: "" },
+      isTop: { type: Boolean, default: true },
+      rating: { type: Number, defualt: 0 },
+      season: { type: String, default: "" },
+    }),
+  ],
+  bottom: [
+    new Schema({
+      uri: { type: String, default: "" },
+      isTop: { type: Boolean, default: false },
+      rating: { type: Number, defualt: 0 },
+      season: { type: String, default: "" },
+    }),
+  ],
 });
 
 /* 

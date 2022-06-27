@@ -12,8 +12,8 @@ const app = express();
 let topAngleServer;
 let bottomAngleServer;
 
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
+app.use(express.urlencoded({ extended: false, limit: "100mb" }));
+app.use(express.json({ limit: "100mb" }));
 app.use(morgan("dev"));
 
 app.use("/user", userRouter);
