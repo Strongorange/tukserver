@@ -8,18 +8,20 @@ const userSchema = new mongoose.Schema({
   password: { type: String },
   top: [
     new Schema({
-      uri: { type: String, default: "" },
-      isTop: { type: Boolean, default: true },
-      rating: { type: Number, defualt: 0 },
-      season: { type: String, default: "" },
+      name: { type: String },
+      uri: { type: String },
+      isTop: { type: Boolean },
+      rating: { type: Number },
+      season: { type: String },
     }),
   ],
   bottom: [
     new Schema({
-      uri: { type: String, default: "" },
-      isTop: { type: Boolean, default: false },
-      rating: { type: Number, defualt: 0 },
-      season: { type: String, default: "" },
+      name: { type: String },
+      uri: { type: String },
+      isTop: { type: Boolean },
+      rating: { type: Number },
+      season: { type: String },
     }),
   ],
 });
