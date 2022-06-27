@@ -1,12 +1,27 @@
 import User from "../models/User";
 import { fStorage } from "../firebase";
-import {
-  getStorage,
-  ref,
-  listAll,
-  uploadString,
-  getDownloadURL,
-} from "firebase/storage";
+import { getStorage, ref, uploadString } from "firebase/storage";
+
+function wait(sec) {
+  let start = Date.now(),
+    now = start;
+  while (now - start < sec * 1000) {
+    now = Date.now();
+  }
+}
+
+export const updateUser = async (req, res) => {
+  const { userInfo } = req.body;
+  const exists = await User.exists({ _id: userInfo._id });
+  if (exists) {
+    console.log("update!");
+    await User.findByIdAndUpdate(exists._id, {
+      $set: { top: userInfo.top, bottom: userInfo.bottom },
+    });
+  }
+
+  res.send("good");
+};
 
 export const postSignup = async (req, res) => {
   console.log(req.body);
@@ -46,7 +61,6 @@ export const postLogin = async (req, res) => {
 export const postPhoto = async (req, res) => {
   const { base64: uri, id, isTop } = req.body;
   const imageName = `${String(Date.now())}.jpg`;
-
   const storageRef = ref(
     fStorage,
     `${id}/${isTop ? "top" : "bottom"}/${imageName}`
@@ -56,21 +70,40 @@ export const postPhoto = async (req, res) => {
     contentType: "image/jpeg",
   }).then((snapshot) => console.log("success!!"));
 
-  const updated = await User.findByIdAndUpdate(
-    id,
-    {
-      $push: {
-        top: {
-          name: imageName,
-          uri: `${id}/${isTop ? "top" : "bottom"}/${imageName}`,
-          isTop,
-          rating: 0,
-          season: "summer",
+  let updated;
+  if (isTop) {
+    updated = await User.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          top: {
+            name: imageName,
+            uri: `${id}/${isTop ? "top" : "bottom"}/${imageName}`,
+            isTop,
+            rating: 0,
+            season: "summer",
+          },
         },
       },
-    },
-    { new: true }
-  );
+      { new: true }
+    );
+  } else if (!isTop) {
+    updated = await User.findByIdAndUpdate(
+      id,
+      {
+        $push: {
+          bottom: {
+            name: imageName,
+            uri: `${id}/${isTop ? "top" : "bottom"}/${imageName}`,
+            isTop,
+            rating: 0,
+            season: "summer",
+          },
+        },
+      },
+      { new: true }
+    );
+  }
   res.send(updated);
 };
 
