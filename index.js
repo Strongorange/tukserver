@@ -3,6 +3,7 @@ import "./db";
 import morgan from "morgan";
 import arduinoRouter from "./routers/arduinoRouter";
 import userRouter from "./routers/userRouter";
+import "./firebase";
 
 const PORT = 3000;
 
