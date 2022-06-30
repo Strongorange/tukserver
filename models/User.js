@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
       isTop: { type: Boolean },
       rating: { type: Number },
       season: { type: String },
+      range: { type: Number },
     }),
   ],
   bottom: [
@@ -22,6 +23,7 @@ const userSchema = new mongoose.Schema({
       isTop: { type: Boolean },
       rating: { type: Number },
       season: { type: String },
+      range: { type: Number },
     }),
   ],
 });

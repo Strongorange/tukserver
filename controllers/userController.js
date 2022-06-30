@@ -12,12 +12,23 @@ function wait(sec) {
 
 export const updateUser = async (req, res) => {
   const { userInfo } = req.body;
+  console.log("User Info \n\n", userInfo);
   const exists = await User.exists({ _id: userInfo._id });
   if (exists) {
-    console.log("update!");
-    await User.findByIdAndUpdate(exists._id, {
-      $set: { top: userInfo.top, bottom: userInfo.bottom },
-    });
+    try {
+      const data = await User.findByIdAndUpdate(
+        exists._id,
+        {
+          $set: { top: userInfo.top, bottom: userInfo.bottom },
+        },
+        { new: true }
+      );
+      console.log("updated \n\n\n", data);
+      console.log("update!");
+    } catch (error) {
+      console.log(error);
+      res.send(error);
+    }
   }
 
   res.send("good");
@@ -48,10 +59,8 @@ export const postSignup = async (req, res) => {
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const exists = await User.exists({ $and: [{ username }, { password }] });
-  const userObj = await User.findById(exists._id);
-
-  console.log(userObj);
   if (exists) {
+    const userObj = await User.findById(exists._id);
     return res.status(200).send(userObj);
   } else {
     return res.status(201).send("error");
@@ -59,16 +68,9 @@ export const postLogin = async (req, res) => {
 };
 
 export const postPhoto = async (req, res) => {
-  const { base64: uri, id, isTop } = req.body;
-  const imageName = `${String(Date.now())}.jpg`;
-  const storageRef = ref(
-    fStorage,
-    `${id}/${isTop ? "top" : "bottom"}/${imageName}`
-  );
+  const { id, isTop, range, url } = req.body;
+
   // console.log(uri, id, isTop);
-  uploadString(storageRef, uri, "base64", {
-    contentType: "image/jpeg",
-  }).then((snapshot) => console.log("success!!"));
 
   let updated;
   if (isTop) {
@@ -77,11 +79,11 @@ export const postPhoto = async (req, res) => {
       {
         $push: {
           top: {
-            name: imageName,
-            uri: `${id}/${isTop ? "top" : "bottom"}/${imageName}`,
+            uri: url,
             isTop,
             rating: 0,
             season: "summer",
+            range,
           },
         },
       },
@@ -93,11 +95,11 @@ export const postPhoto = async (req, res) => {
       {
         $push: {
           bottom: {
-            name: imageName,
-            uri: `${id}/${isTop ? "top" : "bottom"}/${imageName}`,
+            uri: url,
             isTop,
             rating: 0,
             season: "summer",
+            range,
           },
         },
       },
@@ -107,7 +109,15 @@ export const postPhoto = async (req, res) => {
   res.send(updated);
 };
 
-export const testF = (req, res) => {
-  console.log("hi");
-  res.send("good");
+export const getUserFromDB = async (req, res) => {
+  const { id } = req.body;
+  console.log(id);
+  const exists = await User.exists({ _id: id });
+  if (exists) {
+    const userObj = await User.findById(id);
+    res.send(userObj).status(200);
+  } else {
+    console.log("can't find user");
+    res.send("can't find user");
+  }
 };
