@@ -14,6 +14,7 @@ const userSchema = new mongoose.Schema({
       rating: { type: Number },
       season: { type: String },
       range: { type: Number },
+      clothIndex: { type: String },
     }),
   ],
   bottom: [
@@ -24,6 +25,7 @@ const userSchema = new mongoose.Schema({
       rating: { type: Number },
       season: { type: String },
       range: { type: Number },
+      clothIndex: { type: String },
     }),
   ],
 });

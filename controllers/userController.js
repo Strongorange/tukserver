@@ -68,7 +68,7 @@ export const postLogin = async (req, res) => {
 };
 
 export const postPhoto = async (req, res) => {
-  const { id, isTop, range, url } = req.body;
+  const { id, isTop, range, url, clothIndex } = req.body;
 
   // console.log(uri, id, isTop);
 
@@ -84,6 +84,7 @@ export const postPhoto = async (req, res) => {
             rating: 0,
             season: "summer",
             range,
+            clothIndex,
           },
         },
       },
@@ -100,6 +101,7 @@ export const postPhoto = async (req, res) => {
             rating: 0,
             season: "summer",
             range,
+            clothIndex,
           },
         },
       },

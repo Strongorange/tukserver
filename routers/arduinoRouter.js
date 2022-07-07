@@ -1,8 +1,9 @@
 import express from "express";
-import { getData, sendData } from "../controllers/arduinoA";
+import { fromApp, getData, sendData } from "../controllers/arduinoController";
 
 const arduinoRouter = express.Router();
 
-arduinoRouter.route("/top/a/data").get(sendData).post(getData);
+arduinoRouter.route("/get").get(sendData);
+arduinoRouter.route("/:isTop/:clothIndex").post(fromApp);
 
 export default arduinoRouter;

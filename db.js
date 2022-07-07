@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
 
-mongoose.connect("mongodb://localhost:27017/closet", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
+mongoose.connect(
+  "mongodb+srv://chanhwi:passwordlch@closet.aex1xhf.mongodb.net/closet?retryWrites=true&w=majority",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  }
+);
 
 const db = mongoose.connection;
 
